@@ -24,6 +24,90 @@ import { TextArea } from './components/ui/TextArea';
 import { ChipGroup } from './components/ui/ChipGroup';
 import { StrategyView } from './components/StrategyView';
 
+const StrategicOverviewModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-corporate-900/60 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl relative border border-slate-200">
+        <button
+          onClick={onClose}
+          className="absolute top-6 right-6 p-2 text-slate-400 hover:text-corporate-900 transition-colors z-10"
+        >
+          <X size={24} />
+        </button>
+
+        <div className="p-8 md:p-12">
+          <div className="flex items-center gap-2 text-corporate-900 mb-4">
+            <span className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">Strategic Methodology</span>
+            <div className="h-px w-12 bg-slate-200"></div>
+          </div>
+
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-black mb-8 leading-tight">
+            High-Resolution Strategic Planning
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="space-y-8">
+              <section>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 mb-4 border-b border-slate-100 pb-2">Core Purpose</h3>
+                <p className="text-slate-600 leading-relaxed font-light text-lg">
+                  Vector Strategy Engine acts as a senior marketing partner, distilling complex business variables into cohesive, executable growth frameworks. We focus on bridging the gap between generic templates and senior-level consulting.
+                </p>
+              </section>
+
+              <section>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 mb-4 border-b border-slate-100 pb-2">Internal Coherence Protocol</h3>
+                <p className="text-slate-600 leading-relaxed font-light">
+                  Our algorithm performs deep strategic analysis to ensure every element works together. It evaluates your model, audience, and objectives to create strategies where messaging and channels reinforce each other rather than operating in isolation.
+                </p>
+              </section>
+
+              <div className="executive-note !bg-slate-50 border-blue-600">
+                <h4 className="executive-note-title">Executive Insight</h4>
+                <p className="executive-note-content !text-slate-600">
+                  Coherence is the ultimate strategic advantage. When tactics compete, budgets are wasted. When they coordinate, impact is exponential.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-8">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 border-b border-slate-100 pb-2">Strategic Components</h3>
+
+              <ul className="space-y-6">
+                {[
+                  { title: "Strategic Foundation", desc: "Core positioning and messaging frameworks aligned to pain points." },
+                  { title: "Multi-Channel Integration", desc: "Coordinated tactics across paid, organic, and search channels." },
+                  { title: "Funnel Architecture", desc: "Complete customer journey mapping from awareness to conversion." },
+                  { title: "Budget Intelligence", desc: "Resource allocation based on constraints and priorities." },
+                  { title: "Risk Management", desc: "Identification of obstacles and practical mitigation strategies." },
+                ].map((item, i) => (
+                  <li key={i} className="flex gap-4">
+                    <div className="w-1.5 h-1.5 bg-blue-600 shrink-0 mt-2"></div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm mb-1">{item.title}</h4>
+                      <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-12 pt-12 border-t border-slate-100 flex justify-end">
+            <button
+              onClick={onClose}
+              className="px-8 py-3 bg-corporate-900 text-white font-bold uppercase tracking-[0.15em] text-xs hover:bg-black transition-all"
+            >
+              Begin Strategic Session
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Options Constants
 const BUSINESS_MODELS = ['B2B', 'B2C', 'D2C', 'Marketplace', 'Agency'];
 const OFFER_TYPES = ['Product', 'Service', 'Lead Magnet', 'Webinar', 'Consultation', 'SaaS Trial'];
@@ -59,6 +143,8 @@ function App() {
     timeframe: '',
     brand_tone: '',
   });
+
+  const [isOverviewOpen, setIsOverviewOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -388,6 +474,11 @@ function App() {
       </div>
 
       {/* Navigation Sidebar */}
+      <StrategicOverviewModal
+        isOpen={isOverviewOpen}
+        onClose={() => setIsOverviewOpen(false)}
+      />
+
       <div className={`
         fixed inset-0 z-40 bg-corporate-900 text-white w-full md:w-80 lg:w-96 flex-shrink-0 flex flex-col transition-transform duration-300 ease-in-out shadow-2xl md:shadow-none
         ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:min-h-screen
@@ -407,10 +498,24 @@ function App() {
         </div>
 
         <div className="p-6 md:p-12 flex-1 flex flex-col overflow-y-auto">
-          <div className="hidden md:flex items-center gap-3 mb-16">
+          <div className="hidden md:flex items-center gap-3 mb-10">
             <div className="w-10 h-10 bg-white text-corporate-900 flex items-center justify-center font-serif font-bold text-xl rounded-sm">V</div>
             <h1 className="font-serif font-bold text-2xl tracking-widest text-white">VECTOR</h1>
           </div>
+
+          <button
+            onClick={() => setIsOverviewOpen(true)}
+            className="flex items-center gap-3 group mb-8 p-3 bg-corporate-800/50 hover:bg-corporate-800 transition-all border border-corporate-700/50 hover:border-blue-500/50 rounded-sm"
+          >
+            <div className="w-8 h-8 rounded-full border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
+              <Briefcase size={16} />
+            </div>
+            <div className="text-left">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-blue-400 mb-0.5">Methodology</div>
+              <div className="text-xs font-medium text-slate-200 group-hover:text-white transition-colors">Strategic Briefing</div>
+            </div>
+            <ChevronRight size={14} className="ml-auto text-slate-500 group-hover:text-blue-400 transition-colors" />
+          </button>
 
           <div className="space-y-0">
             {STEPS.map((step, index) => {
