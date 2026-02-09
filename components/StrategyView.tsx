@@ -83,6 +83,45 @@ export const StrategyView: React.FC<StrategyViewProps> = ({ data, onReset }) => 
     });
   }, [campaign_strategy.risks]);
 
+  // Normalize channel strategy to handle objects vs strings
+  const normalizedChannelStrategy = useMemo(() => {
+    const cs = campaign_strategy.channel_strategy;
+    if (!cs) return {};
+    if (typeof cs === 'string') {
+      return { 'General Strategy': { strategy: cs } };
+    }
+    if (typeof cs === 'object' && !Array.isArray(cs)) {
+      return cs;
+    }
+    return {};
+  }, [campaign_strategy.channel_strategy]);
+
+  // Normalize timeline to handle objects vs strings
+  const normalizedTimeline = useMemo(() => {
+    const timeline = campaign_strategy.timeline;
+    if (!timeline) return {};
+    if (typeof timeline === 'string') {
+      return { 'General Timeline': [timeline] };
+    }
+    if (typeof timeline === 'object' && !Array.isArray(timeline)) {
+      return timeline;
+    }
+    return {};
+  }, [campaign_strategy.timeline]);
+
+  // Normalize budget allocation to handle objects vs strings
+  const normalizedBudgetAllocation = useMemo(() => {
+    const ba = campaign_strategy.budget_allocation;
+    if (!ba) return null;
+    if (typeof ba === 'string') {
+      return { 'Total Budget': ba };
+    }
+    if (typeof ba === 'object' && !Array.isArray(ba)) {
+      return ba;
+    }
+    return null;
+  }, [campaign_strategy.budget_allocation]);
+
   // Helper to safely render content
   const renderContent = (content: any) => {
     if (typeof content === 'string') return content;
@@ -362,13 +401,13 @@ export const StrategyView: React.FC<StrategyViewProps> = ({ data, onReset }) => 
         </div>
 
         {/* Channel Strategy Grid */}
-        {campaign_strategy.channel_strategy && (
+        {Object.keys(normalizedChannelStrategy).length > 0 && (
           <section className="animate-fadeIn [animation-delay:600ms]">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-serif font-bold text-corporate-900">Channel Strategy</h2>
-              {campaign_strategy.budget_allocation && (
+              {normalizedBudgetAllocation && (
                 <div className="hidden md:flex gap-4 print:flex">
-                  {Object.entries(campaign_strategy.budget_allocation).map(([key, value]: any) => (
+                  {Object.entries(normalizedBudgetAllocation).map(([key, value]: any) => (
                     <div key={key} className="bg-white px-3 py-1.5 rounded-sm border border-slate-200 shadow-sm text-xs font-medium text-slate-600 capitalize print:shadow-none print:border-slate-300">
                       {key.replace('_', ' ')}: <span className="text-corporate-900 font-bold">{renderContent(value)}</span>
                     </div>
@@ -377,7 +416,7 @@ export const StrategyView: React.FC<StrategyViewProps> = ({ data, onReset }) => 
               )}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.entries(campaign_strategy.channel_strategy).map(([channel, details]: any) => {
+              {Object.entries(normalizedChannelStrategy).map(([channel, details]: any) => {
                 // Normalize details: if it's a string, convert to object structure
                 const strategyContent = typeof details === 'string'
                   ? { strategy: details, targeting: null, topics: null, kpis: null, budget: null }
@@ -436,14 +475,14 @@ export const StrategyView: React.FC<StrategyViewProps> = ({ data, onReset }) => 
         )}
 
         {/* Timeline */}
-        {campaign_strategy.timeline && (
+        {Object.keys(normalizedTimeline).length > 0 && (
           <section className="bg-white p-6 md:p-10 rounded-sm shadow-paper border border-slate-200 animate-fadeIn [animation-delay:800ms] print:shadow-none print:border print:border-slate-200 print:break-inside-avoid">
             <div className="flex items-center gap-2 mb-8 border-b border-slate-100 pb-4">
               <Calendar className="text-action-600" size={20} />
               <h2 className="text-xl font-bold text-corporate-900">Execution Timeline</h2>
             </div>
             <div className="space-y-8">
-              {Object.entries(campaign_strategy.timeline).map(([week, tasks]: any, idx: number) => {
+              {Object.entries(normalizedTimeline).map(([week, tasks]: any, idx: number) => {
                 const taskArray = ensureArray(tasks);
 
                 return (
@@ -452,7 +491,7 @@ export const StrategyView: React.FC<StrategyViewProps> = ({ data, onReset }) => 
                       <div className="w-8 h-8 rounded-sm bg-corporate-900 text-white flex items-center justify-center font-bold text-sm shadow-md z-10 print:bg-slate-900 print:text-white print:shadow-none transition-transform duration-300 group-hover:scale-110 group-hover:bg-action-600">
                         {idx + 1}
                       </div>
-                      {idx !== Object.keys(campaign_strategy.timeline).length - 1 && (
+                      {idx !== Object.keys(normalizedTimeline).length - 1 && (
                         <div className="w-px h-full bg-slate-200 my-2 group-last:hidden print:bg-slate-300"></div>
                       )}
                     </div>
