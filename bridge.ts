@@ -15,7 +15,7 @@ export interface CampaignData {
 
 export const submit = async (data: CampaignData): Promise<any> => {
   const url = 'https://v1.mindstudio-api.com/developer/v2/agents/run';
-  
+
   console.log('Submitting data to MindStudio Agent:', data);
 
   try {
@@ -42,7 +42,7 @@ export const submit = async (data: CampaignData): Promise<any> => {
     const result = await response.json();
     console.log('Submission successful:', result);
     return result;
-    
+
   } catch (error) {
     console.error('Error submitting data:', error);
     throw error;
@@ -50,19 +50,6 @@ export const submit = async (data: CampaignData): Promise<any> => {
 };
 
 export const useTemplateVariables = (): Partial<CampaignData> => {
-  // Pre-filling with the user's requested default data
-  return {
-    business_industry: "SaaS",
-    business_model: "B2C",
-    offer_type: "Lead Magnet",
-    offer_description: "AI Audit and 90 Day Roadmap",
-    offer_price: "$2000",
-    objective: "Leads",
-    audience_persona: "CTO and Director of IT in a SMB",
-    audience_geo: "USA",
-    monthly_budget: "$200",
-    channels: ["Paid Social", "Influencer", "SEO/Content"],
-    timeframe: "30 days",
-    brand_tone: "Authority"
-  };
+  // Return empty object so form starts with no pre-filled data
+  return {};
 };
