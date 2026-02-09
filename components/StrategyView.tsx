@@ -100,12 +100,42 @@ export const StrategyView: React.FC<StrategyViewProps> = ({ data, onReset }) => 
   const normalizedTimeline = useMemo(() => {
     const timeline = campaign_strategy.timeline;
     if (!timeline) return {};
+
+    // Handle String
     if (typeof timeline === 'string') {
       return { 'General Timeline': [timeline] };
     }
-    if (typeof timeline === 'object' && !Array.isArray(timeline)) {
+
+    // Handle Array directly: [{week: 1, activities: "..."}, ...]
+    if (Array.isArray(timeline)) {
+      const result: any = {};
+      timeline.forEach((item: any, idx: number) => {
+        const key = (typeof item === 'object' && item !== null && item.week) ? `Week ${item.week}` : `Phase ${idx + 1}`;
+        result[key] = item;
+      });
+      return result;
+    }
+
+    // Handle Object: Check for nested "Weeks" or "Timeline" arrays
+    if (typeof timeline === 'object' && timeline !== null) {
+      const keys = Object.keys(timeline);
+      // If it's something like { "Weeks": [...] } or { "Timeline": [...] }
+      if (keys.length === 1 && (keys[0].toLowerCase() === 'weeks' || keys[0].toLowerCase() === 'timeline')) {
+        const nested = timeline[keys[0]];
+        if (Array.isArray(nested)) {
+          const result: any = {};
+          nested.forEach((item: any, idx: number) => {
+            const key = (typeof item === 'object' && item !== null && (item.week || item.phase))
+              ? `Week ${item.week || item.phase}`
+              : `Phase ${idx + 1}`;
+            result[key] = item;
+          });
+          return result;
+        }
+      }
       return timeline;
     }
+
     return {};
   }, [campaign_strategy.timeline]);
 
@@ -123,12 +153,17 @@ export const StrategyView: React.FC<StrategyViewProps> = ({ data, onReset }) => 
   }, [campaign_strategy.budget_allocation]);
 
   // Helper to safely render content
-  const renderContent = (content: any) => {
+  const renderContent = (content: any): any => {
     if (typeof content === 'string') return content;
     if (typeof content === 'number') return content;
     if (typeof content === 'object' && content !== null) {
-      // Try to find a meaningful string property
-      return content.description || content.text || content.name || JSON.stringify(content);
+      // Try to find a meaningful string property, prioritizing activities/activity
+      const val = content.activities || content.activity || content.description || content.text || content.name;
+      if (val !== undefined && val !== null) {
+        if (Array.isArray(val)) return val.join(', ');
+        return val;
+      }
+      return JSON.stringify(content);
     }
     return '';
   };
