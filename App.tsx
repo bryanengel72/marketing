@@ -409,7 +409,7 @@ function App() {
         <div className="p-6 md:p-12 flex-1 flex flex-col overflow-y-auto">
           <div className="hidden md:flex items-center gap-3 mb-16">
             <div className="w-10 h-10 bg-white text-corporate-900 flex items-center justify-center font-serif font-bold text-xl rounded-sm">V</div>
-            <h1 className="font-serif font-bold text-2xl tracking-widest">VECTOR</h1>
+            <h1 className="font-serif font-bold text-2xl tracking-widest text-white">VECTOR</h1>
           </div>
 
           <div className="space-y-0">
@@ -428,10 +428,10 @@ function App() {
                       ${isActive ? 'active' : isCompleted ? 'completed' : 'bg-corporate-700'}
                     `}></div>
                     <div className="pt-0">
-                      <p className={`sidebar-step-title text-xs font-medium uppercase tracking-wider mb-1 transition-colors ${isActive ? 'text-white' : 'text-corporate-400'}`}>
+                      <p className={`sidebar-step-title text-xs font-medium uppercase tracking-wider mb-1 transition-colors ${isActive ? 'text-white' : 'text-slate-400'}`}>
                         {step.subtitle}
                       </p>
-                      <h3 className={`font-serif font-normal text-base leading-tight transition-colors ${isActive ? 'text-white font-medium' : 'text-corporate-300'}`}>
+                      <h3 className={`font-serif font-normal text-base leading-tight transition-colors ${isActive ? 'text-white font-medium' : 'text-slate-200'}`}>
                         {step.title}
                       </h3>
                     </div>
