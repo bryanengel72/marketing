@@ -108,6 +108,59 @@ const StrategicOverviewModal = ({ isOpen, onClose }: { isOpen: boolean, onClose:
   );
 };
 
+const StrategicLoadingState = ({ isLoading }: { isLoading: boolean }) => {
+  const [messageIndex, setMessageIndex] = React.useState(0);
+  const messages = [
+    "Synthesizing market context...",
+    "Analyzing business model heuristics...",
+    "Mapping audience persona archetypes...",
+    "Optimizing multi-channel funnel architecture...",
+    "Calibrating budget intelligence protocols...",
+    "Finalizing strategic roadmap...",
+    "Reviewing cross-channel synergies...",
+    "Validating KPI alignment..."
+  ];
+
+  React.useEffect(() => {
+    if (!isLoading) return;
+    const interval = setInterval(() => {
+      setMessageIndex((prev) => (prev + 1) % messages.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, [isLoading]);
+
+  if (!isLoading) return null;
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-white/90 backdrop-blur-md transition-all duration-700 animate-fadeIn">
+      <div className="max-w-md w-full px-8 text-center">
+        <div className="mb-12 relative flex justify-center">
+          <div className="w-16 h-16 border-2 border-slate-100 rounded-full"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-600 animate-pulse rounded-sm"></div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-16 h-16 border-t-2 border-blue-600 rounded-full animate-spin duration-1000"></div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-blue-600 block mb-2">Vector Engine</span>
+          <div className="h-8 flex items-center justify-center">
+            <p className="text-xl font-serif text-slate-900 animate-pulse transition-all duration-500 italic">
+              {messages[messageIndex]}
+            </p>
+          </div>
+          <div className="w-full bg-slate-100 h-px mt-8 relative overflow-hidden">
+            <div className="absolute inset-0 bg-blue-600 h-full w-1/3 animate-loadingProgress"></div>
+          </div>
+          <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-4">Consulting Logic Protocol v4.2</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Options Constants
 const BUSINESS_MODELS = ['B2B', 'B2C', 'D2C', 'Marketplace', 'Agency'];
 const OFFER_TYPES = ['Product', 'Service', 'Lead Magnet', 'Webinar', 'Consultation', 'SaaS Trial'];
@@ -457,6 +510,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans overflow-x-hidden">
+      <StrategicLoadingState isLoading={isLoading} />
 
       {/* Mobile Header */}
       <div className="md:hidden bg-corporate-900 text-white p-4 flex justify-between items-center sticky top-0 z-30 shadow-md">
@@ -735,10 +789,9 @@ function App() {
                 disabled={isLoading}
                 className="flex-1 md:flex-none bg-action-600 text-white font-medium py-3 px-6 md:px-8 rounded-sm hover:bg-action-700 transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-100 uppercase tracking-wide text-xs md:text-sm disabled:opacity-70 disabled:cursor-not-allowed active:transform active:translate-y-0.5"
               >
-                {isLoading ? <Loader2 className="animate-spin" size={16} /> : null}
                 <span className="hidden md:inline">Generate Strategy</span>
                 <span className="md:hidden">Submit</span>
-                {!isLoading && <ArrowRight size={16} />}
+                <ArrowRight size={16} />
               </button>
             )}
           </div>
@@ -825,8 +878,18 @@ function App() {
           }
           to { 
             opacity: 1; 
-            transform: scale(1) rotate(0);
+            transform: translateX(0);
           }
+        }
+
+        @keyframes loadingProgress {
+          0% { left: -100%; width: 100%; }
+          50% { left: 0%; width: 100%; }
+          100% { left: 100%; width: 100%; }
+        }
+
+        .animate-loadingProgress {
+          animation: loadingProgress 2s infinite ease-in-out;
         }
         .animate-scaleIn {
           animation: scaleIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
