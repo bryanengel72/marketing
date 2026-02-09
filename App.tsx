@@ -651,35 +651,158 @@ function App() {
 
       <style>{`
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { 
+            opacity: 0; 
+            transform: translateY(20px) scale(0.95);
+            filter: blur(4px);
+          }
+          to { 
+            opacity: 1; 
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+          }
         }
         .animate-fadeIn {
-          animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(20px); }
-          to { opacity: 1; transform: translateX(0); }
+          from { 
+            opacity: 0; 
+            transform: translateX(40px) rotateY(-10deg);
+            filter: blur(2px);
+          }
+          to { 
+            opacity: 1; 
+            transform: translateX(0) rotateY(0);
+            filter: blur(0);
+          }
         }
         .animate-slideInRight {
-          animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: slideInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes slideInLeft {
-          from { opacity: 0; transform: translateX(-20px); }
-          to { opacity: 1; transform: translateX(0); }
+          from { 
+            opacity: 0; 
+            transform: translateX(-40px) rotateY(10deg);
+            filter: blur(2px);
+          }
+          to { 
+            opacity: 1; 
+            transform: translateX(0) rotateY(0);
+            filter: blur(0);
+          }
         }
         .animate-slideInLeft {
-          animation: slideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         
         @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.8); }
-          to { opacity: 1; transform: scale(1); }
+          from { 
+            opacity: 0; 
+            transform: scale(0.7) rotate(-2deg);
+          }
+          to { 
+            opacity: 1; 
+            transform: scale(1) rotate(0);
+          }
         }
         .animate-scaleIn {
-          animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          animation: scaleIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+        }
+
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.02); }
+        }
+
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        /* Enhanced button hover effects */
+        button, .button {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+        }
+
+        button:hover:not(:disabled), .button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:active:not(:disabled), .button:active {
+          transform: translateY(0);
+          transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Input focus animations */
+        input, textarea, select {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:focus, textarea:focus, select:focus {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Card hover effects */
+        .bg-white, .bg-corporate-800 {
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .shadow-paper:hover {
+          box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(0, 0, 0, 0.04);
+          transform: translateY(-4px);
+        }
+
+        /* Sidebar step animations */
+        .group:hover {
+          animation: float 2s ease-in-out infinite;
+        }
+
+        /* Loading spinner enhancement */
+        @keyframes spinEnhanced {
+          from { transform: rotate(0deg) scale(1); }
+          50% { transform: rotate(180deg) scale(1.1); }
+          to { transform: rotate(360deg) scale(1); }
+        }
+
+        .animate-spin {
+          animation: spinEnhanced 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        /* Smooth page transitions */
+        * {
+          transition-property: background-color, border-color, color, fill, stroke;
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          transition-duration: 200ms;
+        }
+
+        /* Ripple effect on click */
+        @keyframes ripple {
+          0% {
+            transform: scale(0);
+            opacity: 0.6;
+          }
+          100% {
+            transform: scale(4);
+            opacity: 0;
+          }
         }
       `}</style>
     </div>
